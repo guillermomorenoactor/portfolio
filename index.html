@@ -106,6 +106,7 @@ nav.scrolled {
   text-transform: uppercase;
   color: var(--white);
   text-decoration: none;
+  white-space: nowrap;
 }
 .nav-links {
   display: flex;
@@ -122,6 +123,7 @@ nav.scrolled {
   text-decoration: none;
   position: relative;
   transition: color 0.3s ease;
+  white-space: nowrap;
 }
 .nav-links a::after {
   content: '';
@@ -197,8 +199,9 @@ nav.scrolled {
   font-weight: 400;
 }
 .hero-stats {
-  display: flex;
-  gap: 3rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
   margin-top: 3.5rem;
   opacity: 0;
   animation: fadeUp 1s ease 1.4s forwards;
@@ -406,6 +409,10 @@ nav.scrolled {
   color: rgba(201,168,76,0.3);
   padding: 0 1rem;
   white-space: nowrap;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 60vw;
 }
 
 /* ── VIDEOBOOK ── */
@@ -742,14 +749,27 @@ footer {
   .nav-links a { font-size: 0.62rem; letter-spacing: 0.15em; }
 
   /* HERO */
-  #sobre-mi { grid-template-columns: 1fr; }
-  .hero-right { display: none; }
-  .hero-left { padding: 6.5rem 1.5rem 4rem; }
+  #sobre-mi { grid-template-columns: 1fr; position: relative; min-height: 100vh; }
+  .hero-right {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: block;
+  }
+  .hero-right::before {
+    background: linear-gradient(to bottom, rgba(10,10,10,0.5) 0%, rgba(10,10,10,0.85) 60%, var(--ink) 100%);
+  }
+  .hero-left {
+    position: relative;
+    z-index: 1;
+    padding: 6.5rem 1.5rem 4rem;
+  }
   .hero-name { font-size: clamp(2.8rem, 10vw, 4rem); }
   .hero-bio { font-size: 0.88rem; }
-  .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
-  .stat-num { font-size: 1.8rem; }
-  .stat-label { font-size: 0.58rem; }
+  .hero-stats { gap: 1rem; flex-wrap: wrap; }
+  .stat-num { font-size: 1.6rem; }
+  .stat-label { font-size: 0.55rem; letter-spacing: 0.1em; }
+  .stat-item { min-width: 0; }
 
   /* FORMATION */
   .formation-strip { padding: 3.5rem 1.5rem; }
@@ -776,18 +796,26 @@ footer {
   .contact-card { padding: 2rem 1.5rem; }
   .contact-social { gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
 
+  /* FILM STRIP */
+  .film-strip { padding: 0 1rem; }
+  .film-hole { display: none; }
+  .film-label { max-width: 100%; text-align: center; justify-content: center; }
+
   /* FOOTER */
   footer { flex-direction: column; gap: 0.8rem; text-align: center; padding: 1.8rem 1.5rem; }
   .footer-name { font-size: 0.8rem; }
 }
 
 @media (max-width: 480px) {
-  .nav-links { gap: 0.8rem; }
-  .nav-links a { font-size: 0.58rem; }
+  .nav-links { gap: 0.7rem; }
+  .nav-links a { font-size: 0.55rem; letter-spacing: 0.1em; }
   .hero-left { padding: 6rem 1.2rem 3.5rem; }
   .hero-name { font-size: clamp(2.4rem, 11vw, 3.2rem); }
-  .hero-stats { gap: 1.2rem; }
+  .hero-stats { grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+  .stat-num { font-size: 1.4rem; }
+  .stat-label { font-size: 0.5rem; }
   .formation-strip { padding: 3rem 1.2rem; }
+  .formation-grid { grid-template-columns: 1fr !important; }
   .carousel-slide { width: 190px; height: 280px; }
   #videobook { padding: 4rem 1.2rem; }
   #contacto { padding: 4rem 1.2rem; }
@@ -979,8 +1007,14 @@ footer {
           frameborder="0"
           allow="autoplay; fullscreen; picture-in-picture"
           allowfullscreen
-          title="Videobook de Guillermo Moreno 2026">
+          title="Videobook de Guillermo Moreno 2026"
+          id="yt-iframe">
         </iframe>
+        <div id="yt-fallback" style="display:none; position:absolute; inset:0; background:var(--ash); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.5rem; padding:2rem; text-align:center;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,76,0.6)" stroke-width="1"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16" fill="rgba(201,168,76,0.6)" stroke="none"/></svg>
+          <p style="font-family:var(--sans);font-size:0.8rem;color:var(--silver);line-height:1.6;">El propietario del vídeo ha desactivado la reproducción en otros sitios web.<br>Puedes verlo directamente en YouTube.</p>
+          <a href="https://youtu.be/cBB_kZIvdAE" target="_blank" rel="noopener" style="font-family:var(--sans);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink);background:var(--gold);padding:0.7rem 1.8rem;text-decoration:none;">Ver en YouTube</a>
+        </div>
       </div>
     </div>
   </div>
@@ -1423,6 +1457,25 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 
 </script>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">
+  // ── YOUTUBE EMBED CHECK ─────────────────────────────
+  (function() {
+    const iframe = document.getElementById('yt-iframe');
+    const fallback = document.getElementById('yt-fallback');
+    if (!iframe || !fallback) return;
+    // Show fallback after timeout if iframe hasn't loaded
+    const timer = setTimeout(() => {
+      // Check if iframe loaded by trying to access contentWindow
+      try {
+        const blocked = !iframe.contentWindow || iframe.contentWindow.length === 0;
+        if (blocked) { iframe.style.display='none'; fallback.style.display='flex'; }
+      } catch(e) {
+        iframe.style.display='none'; fallback.style.display='flex';
+      }
+    }, 3000);
+    iframe.addEventListener('load', () => clearTimeout(timer));
+  })();
+
+</script>
 </body>
 </html>
