@@ -199,16 +199,14 @@ nav.scrolled {
   font-weight: 400;
 }
 .hero-stats {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
   margin-top: 3.5rem;
   opacity: 0;
   animation: fadeUp 1s ease 1.4s forwards;
 }
-.stat-item { text-align: left; flex: 1; min-width: 0; }
+.stat-item { text-align: left; }
 .stat-num {
   font-family: var(--serif);
   font-size: 2.4rem;
@@ -674,8 +672,6 @@ footer {
   padding: 0;
   cursor: grab;
   user-select: none;
-  touch-action: pan-y;
-  -webkit-user-select: none;
 }
 .carousel-track-wrapper.is-dragging {
   cursor: grabbing;
@@ -730,52 +726,6 @@ footer {
   .carousel-slide { width: 240px; height: 360px; }
 }
 
-
-/* ── HAMBURGER NAV ── */
-.nav-hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-  z-index: 200;
-}
-.nav-hamburger span {
-  display: block;
-  width: 24px;
-  height: 1.5px;
-  background: var(--cream);
-  transition: all 0.3s ease;
-}
-.nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-.nav-hamburger.open span:nth-child(2) { opacity: 0; }
-.nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
-
-.nav-mobile-menu {
-  display: none;
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(10,10,10,0.97);
-  z-index: 150;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3rem;
-}
-.nav-mobile-menu.open { display: flex; }
-.nav-mobile-menu a {
-  font-family: var(--serif);
-  font-size: 2rem;
-  font-weight: 300;
-  color: var(--cream);
-  text-decoration: none;
-  letter-spacing: 0.1em;
-  transition: color 0.3s ease;
-}
-.nav-mobile-menu a:hover { color: var(--gold); }
-
 /* ── RESPONSIVE ──
  */
 @media (max-width: 1024px) {
@@ -795,8 +745,8 @@ footer {
   /* NAV */
   nav { padding: 1rem 1.5rem; }
   .nav-logo { font-size: 0.85rem; }
-  .nav-links { display: none; }
-  .nav-hamburger { display: flex; }
+  .nav-links { gap: 1.2rem; }
+  .nav-links a { font-size: 0.62rem; letter-spacing: 0.15em; }
 
   /* HERO */
   #sobre-mi { grid-template-columns: 1fr; position: relative; min-height: 100vh; }
@@ -816,10 +766,10 @@ footer {
   }
   .hero-name { font-size: clamp(2.8rem, 10vw, 4rem); }
   .hero-bio { font-size: 0.88rem; }
-  .hero-stats { gap: 0.3rem; flex-wrap: nowrap; justify-content: space-between; }
-  .stat-num { font-size: 1.4rem; }
-  .stat-label { font-size: 0.5rem; letter-spacing: 0.05em; }
-  .stat-item { flex: 1; min-width: 0; }
+  .hero-stats { gap: 1rem; flex-wrap: wrap; }
+  .stat-num { font-size: 1.6rem; }
+  .stat-label { font-size: 0.55rem; letter-spacing: 0.1em; }
+  .stat-item { min-width: 0; }
 
   /* FORMATION */
   .formation-strip { padding: 3.5rem 1.5rem; }
@@ -861,9 +811,9 @@ footer {
   .nav-links a { font-size: 0.55rem; letter-spacing: 0.1em; }
   .hero-left { padding: 6rem 1.2rem 3.5rem; }
   .hero-name { font-size: clamp(2.4rem, 11vw, 3.2rem); }
-  .hero-stats { gap: 0.2rem; flex-wrap: nowrap; }
-  .stat-num { font-size: 1.2rem; }
-  .stat-label { font-size: 0.45rem; }
+  .hero-stats { grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+  .stat-num { font-size: 1.4rem; }
+  .stat-label { font-size: 0.5rem; }
   .formation-strip { padding: 3rem 1.2rem; }
   .formation-grid { grid-template-columns: 1fr !important; }
   .carousel-slide { width: 190px; height: 280px; }
@@ -891,16 +841,7 @@ footer {
     <li><a href="#videobook">Videobook</a></li>
     <li><a href="#contacto">Contacto</a></li>
   </ul>
-  <button class="nav-hamburger" id="navHamburger" aria-label="Menú">
-    <span></span><span></span><span></span>
-  </button>
 </nav>
-<div class="nav-mobile-menu" id="navMobileMenu">
-  <a href="#sobre-mi" onclick="closeMobileMenu()">Sobre mí</a>
-  <a href="#galeria" onclick="closeMobileMenu()">Galería</a>
-  <a href="#videobook" onclick="closeMobileMenu()">Videobook</a>
-  <a href="#contacto" onclick="closeMobileMenu()">Contacto</a>
-</div>
 
 <!-- ══════════════════════════════════════════════
      SECCIÓN 1 — SOBRE MÍ
@@ -1062,15 +1003,12 @@ footer {
     <div class="video-wrapper-container reveal reveal-delay-1" style="width:100%;">
       <div class="video-wrapper" id="video-container">
         <iframe
-          width="100%" height="100%"
-          src="https://www.youtube.com/embed/cBB_kZIvdAE?si=gs36qxUpX6T0xqra"
-          title="YouTube video player"
+          src="https://www.youtube.com/embed/cBB_kZIvdAE?rel=0&modestbranding=1"
           frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
+          allow="autoplay; fullscreen; picture-in-picture"
           allowfullscreen
-          id="yt-iframe"
-          style="position:absolute;inset:0;width:100%;height:100%;">
+          title="Videobook de Guillermo Moreno 2026"
+          id="yt-iframe">
         </iframe>
         <div id="yt-fallback" style="display:none; position:absolute; inset:0; background:var(--ash); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.5rem; padding:2rem; text-align:center;">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,76,0.6)" stroke-width="1"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16" fill="rgba(201,168,76,0.6)" stroke="none"/></svg>
@@ -1123,7 +1061,7 @@ footer {
     </div>
 
     <!-- Social links -->
-    <div class="contact-social reveal reveal-delay-2">
+    <div class="contact-social reveal reveal-delay-3">
       <a href="https://instagram.com/guillermooreno" target="_blank" rel="noopener" class="social-link">
         <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
         Instagram
@@ -1135,7 +1073,7 @@ footer {
 <!-- FOOTER -->
 <footer>
   <span class="footer-name">Guillermo Moreno — Actor</span>
-  <span class="footer-copy">&copy; 2026 · Madrid, España</span>
+  <span class="footer-copy">&copy; 2025 · Madrid, España · Nacido el 09/11/2001</span>
 </footer>
 
 <script>
@@ -1183,18 +1121,6 @@ document.addEventListener('DOMContentLoaded', () => {
       cursorRing.style.height = '36px';
     });
   });
-
-
-  // ── HAMBURGER MENU ──────────────────────────────────────
-  const hamburger = document.getElementById('navHamburger');
-  const mobileMenu = document.getElementById('navMobileMenu');
-  if (hamburger && mobileMenu) {
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('open');
-      mobileMenu.classList.toggle('open');
-      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
-    });
-  }
 
   // ── NAV SCROLL BEHAVIOUR ───────────────────────────────
   const nav = document.querySelector('nav');
@@ -1549,16 +1475,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 3000);
     iframe.addEventListener('load', () => clearTimeout(timer));
   })();
-
-
-// ── CLOSE MOBILE MENU (global) ───────────────────────────
-function closeMobileMenu() {
-  const hamburger = document.getElementById('navHamburger');
-  const mobileMenu = document.getElementById('navMobileMenu');
-  if (hamburger) hamburger.classList.remove('open');
-  if (mobileMenu) mobileMenu.classList.remove('open');
-  document.body.style.overflow = '';
-}
 
 </script>
 </body>
